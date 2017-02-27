@@ -9,4 +9,14 @@ public class MentatModule extends ReinstallableGuiceModule {
   protected void configure() {
     bind(DBI.class).toProvider(DBIProvider.class).in(Scopes.SINGLETON);
   }
+
+  public void bindDaos(Class<?>... daos) {
+    for (Class<?> dao : daos) {
+      bindDao(dao);
+    }
+  }
+
+  public <T> void bindDao(Class<T> clazz) {
+    bind(clazz).toProvider(new DaoProvider<>(getProvider(DBI.class), clazz)).in(Scopes.SINGLETON);
+  }
 }
