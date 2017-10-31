@@ -3,27 +3,21 @@ package com.muchq.mentat;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.hubspot.rosetta.jdbi.RosettaMapperFactory;
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
 import org.skife.jdbi.v2.DBI;
 
+import javax.sql.DataSource;
+
 public class DBIProvider implements Provider<DBI> {
-  private final MySqlConfiguration configuration;
+  private final DataSource dataSource;
 
   @Inject
-  public DBIProvider(MySqlConfiguration configuration) {
-    this.configuration = configuration;
+  public DBIProvider(DataSource dataSource) {
+    this.dataSource = dataSource;
   }
 
   @Override
   public DBI get() {
-    HikariConfig config = new HikariConfig("/hikari.properties");
-    config.setUsername(configuration.getUsername());
-    config.setPassword(configuration.getPassword());
-    config.addDataSourceProperty("databaseName", configuration.getDb());
-    config.addDataSourceProperty("serverName", configuration.getHost());
-
-    DBI dbi = new DBI(new HikariDataSource(config));
+    DBI dbi = new DBI(dataSource);
     dbi.registerMapper(new RosettaMapperFactory());
     dbi.registerContainerFactory(new OptionalContainerFactory());
     return dbi;
