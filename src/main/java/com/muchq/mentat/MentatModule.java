@@ -8,7 +8,6 @@ import org.skife.jdbi.v2.DBI;
 public class MentatModule extends ReinstallableGuiceModule {
   @Override
   protected void configure() {
-    bind(HikariDataSourceProvider.class);
     bind(DBI.class).toProvider(DBIProvider.class).in(Scopes.SINGLETON);
   }
 

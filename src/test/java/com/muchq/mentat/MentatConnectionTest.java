@@ -28,7 +28,7 @@ public class MentatConnectionTest {
     Injector injector = Guice.createInjector(new AbstractModule() {
       @Override
       protected void configure() {
-        install(new MentatModule().bindDao(binder(), TestFooDao.class));
+        install(new MentatModule().bindDaos(binder(), TestFooDao.class));
         bind(DataSource.class).toProvider(HikariDataSourceProvider.class);
       }
 
